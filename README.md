@@ -1,6 +1,6 @@
 # Домашнее задание к занятию «Микросервисы: подходы»
 
-**Студент:** Илья \[фамилия\]
+**Студент:** Демин Илья Викторович
 
 ------------------------------------------------------------------------
 
@@ -127,39 +127,6 @@ CLI и дополнительные утилиты.
 уменьшает вероятность ошибок, связанных с различиями в версиях
 инструментов.
 
-Пример фрагмента `.gitlab-ci.yml`:
-
-``` yaml
-stages:
-  - build
-  - test
-  - package
-
-variables:
-  APP_NAME: "orders-service"
-
-build:
-  stage: build
-  image: maven:3.9-eclipse-temurin-21
-  script:
-    - mvn clean compile
-
-unit_tests:
-  stage: test
-  image: maven:3.9-eclipse-temurin-21
-  script:
-    - mvn test
-
-docker_build:
-  stage: package
-  image: docker:cli
-  services:
-    - docker:dind
-  script:
-    - docker build -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
-    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
-```
-
 В production-среде для сборки Docker-образов следует отдельно продумать
 безопасную настройку runner и способ доступа к Docker daemon. Необходимо
 избегать выдачи избыточных привилегий недоверенным заданиям.
@@ -282,19 +249,6 @@ Kubernetes. Приложениям не требуется самостояте�
 -   окружение;
 -   идентификатор запроса или trace ID;
 -   текст сообщения.
-
-Например:
-
-``` json
-{
-  "timestamp": "2026-11-24T10:00:00Z",
-  "level": "ERROR",
-  "service": "orders-service",
-  "environment": "production",
-  "trace_id": "abc123",
-  "message": "Database connection failed"
-}
-```
 
 Такой формат упрощает фильтрацию и поиск по отдельным полям. При этом
 приложение не должно знать адрес центрального хранилища и не должно
